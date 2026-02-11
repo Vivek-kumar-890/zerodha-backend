@@ -23,8 +23,8 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://zerodha-frontend-n26g.vercel.app/",
-      "https://zerodha-dashboard-sable.vercel.app/",
+      "https://zerodha-frontend-n26g.vercel.app",
+      "https://zerodha-dashboard-sable.vercel.app",
     ],
     credentials: true,
   }),

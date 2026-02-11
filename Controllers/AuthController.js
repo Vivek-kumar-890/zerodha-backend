@@ -23,6 +23,8 @@ module.exports.Signup = async (req, res) => {
     res.cookie("token", token, {
       withCredentials: true,
       httpOnly: false,
+      secure: true,      
+      sameSite: "None",
     });
 
     await newUser.save();
