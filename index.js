@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -6,9 +6,9 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
-const HoldingsModel = require('./models/HoldingsModel');
-const PositionsModel = require('./models/PositionsModel');
-const OrdersModel = require('./models/OrdersModel');
+const HoldingsModel = require("./models/HoldingsModel");
+const PositionsModel = require("./models/PositionsModel");
+const OrdersModel = require("./models/OrdersModel");
 
 const authRoutes = require("./routes/authRoute");
 const authMiddleware = require("./middleware/authMiddleware");
@@ -18,10 +18,17 @@ const MONGO_URL = process.env.MONGO_URL;
 
 const app = express();
 
-app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001"],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://zerodha-frontend-n26g.vercel.app/",
+      "https://zerodha-dashboard-sable.vercel.app/",
+    ],
+    credentials: true,
+  }),
+);
 
 // app.use(bodyParser.json());
 app.use(cookieParser());
@@ -29,19 +36,16 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
 // Routes
 app.use("/", authRoutes);
 
-
 app.get("/profile", authMiddleware, (req, res) => {
-    res.json({
-        message: "Profile accessed",
+  res.json({
+    message: "Profile accessed",
 
-        user: req.user
-    });
+    user: req.user,
+  });
 });
-
 
 // app.get("/addHoldings", async (req, res) => {
 //   let tempHoldings = [
@@ -172,8 +176,6 @@ app.get("/profile", authMiddleware, (req, res) => {
 //   res.send("Done!");
 // });
 
-
-
 // app.get("/addPositions", async (req, res) =>{
 //   let tempPositions = [
 //     {
@@ -215,19 +217,17 @@ app.get("/profile", authMiddleware, (req, res) => {
 // res.send("Done!");
 // });
 
-
-
-app.get("/allHoldings", async(req, res) =>{
+app.get("/allHoldings", async (req, res) => {
   let allHoldings = await HoldingsModel.find({});
   res.json(allHoldings);
 });
 
-app.get("/allPositions", async(req, res) =>{
+app.get("/allPositions", async (req, res) => {
   let allPositions = await PositionsModel.find({});
   res.json(allPositions);
 });
 
-app.post('/newOrder', async (req, res) => {
+app.post("/newOrder", async (req, res) => {
   let newOrder = new OrdersModel({
     name: req.body.name,
     qty: req.body.qty,
@@ -239,8 +239,8 @@ app.post('/newOrder', async (req, res) => {
   res.send("Order saved!");
 });
 
-app.listen(PORT,() =>{
-    console.log("App is listening on 3002!");
-    mongoose.connect(MONGO_URL);
-    console.log("connection successful");
+app.listen(PORT, () => {
+  console.log("App is listening on 3002!");
+  mongoose.connect(MONGO_URL);
+  console.log("connection successful");
 });
